@@ -7,19 +7,33 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: #fdf7f8;
+      background: url('https://github.com/Per-Arredondo/Clinica_medica/blob/main/Fondo%20JPG.jpeg?raw=true') no-repeat center center fixed;
+      background-size: cover;
       font-family: 'Segoe UI', sans-serif;
     }
-    header {
-      background: url('https://github.com/Per-Arredondo/Clinica_medica/blob/main/Fondo%20JPG.jpeg?raw=true') no-repeat center;
-      background-size: cover;
-      padding: 40px 0;
+    .logo-top {
       text-align: center;
-      color: #6d4c41;
+      padding: 30px 0 10px 0;
     }
-    .logo {
+    .logo-top img {
       max-width: 180px;
-      margin-bottom: 15px;
+    }
+    .hero-image {
+      background: url('https://github.com/ValentinR359/portada/blob/main/Portada.png?raw=true') no-repeat center;
+      background-size: cover;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5c4033;
+      text-shadow: 1px 1px 2px #fff;
+      margin-bottom: 30px;
+    }
+    .hero-image h1 {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
     }
     .section {
       background-color: #fff;
@@ -50,11 +64,13 @@
 </head>
 <body>
 
-<header>
-  <img src="Annia_Logo_Final.png" alt="Logo Annia" class="logo" />
+<div class="logo-top">
+  <img src="https://raw.githubusercontent.com/ValentinR359/imglogo-/refs/heads/main/Logo%20Annia.PNG?raw=true" alt="Logo Annia" />
+</div>
+
+<div class="hero-image">
   <h1>Clínica Integral para la Mujer</h1>
-  <p style="font-size: 1.2rem;">Tu salud, tu belleza, tu momento.</p>
-</header>
+</div>
 
 <div class="section">
   <h2>¿Quiénes Somos?</h2>
@@ -78,22 +94,22 @@
 
 <div class="section">
   <h4>📅 Agenda tu cita</h4>
-  <form>
+  <form id="citaForm">
     <div class="mb-3">
       <label class="form-label">👩 Nombre completo</label>
-      <input type="text" class="form-control" required>
+      <input type="text" class="form-control" id="nombre" required>
     </div>
     <div class="mb-3">
       <label class="form-label">📞 Teléfono</label>
-      <input type="tel" class="form-control" required>
+      <input type="tel" class="form-control" id="telefono" required>
     </div>
     <div class="mb-3">
       <label class="form-label">📧 Correo electrónico</label>
-      <input type="email" class="form-control" required>
+      <input type="email" class="form-control" id="correo" required>
     </div>
     <div class="mb-3">
       <label class="form-label">🏥 Especialidad</label>
-      <select class="form-select" required>
+      <select class="form-select" id="especialidad" required>
         <option>Medicina General</option>
         <option>Ginecología</option>
         <option>Dermatología</option>
@@ -105,19 +121,55 @@
     </div>
     <div class="mb-3">
       <label class="form-label">📆 Fecha</label>
-      <input type="date" class="form-control" required>
+      <input type="date" class="form-control" id="fecha" required>
     </div>
     <div class="mb-3">
       <label class="form-label">⏰ Hora</label>
-      <input type="time" class="form-control" required>
+      <input type="time" class="form-control" id="hora" required>
     </div>
     <div class="mb-3">
       <label class="form-label">💬 Comentarios</label>
-      <textarea class="form-control" rows="3"></textarea>
+      <textarea class="form-control" id="comentarios" rows="3"></textarea>
     </div>
     <button type="submit" class="btn btn-primary w-100">Agendar cita</button>
+    <div class="alert alert-success confirmation" id="confirmacion" style="display: none; margin-top: 15px;">
+      ✅ Gracias, tu cita ha sido agendada.<br>
+      ⏳ Redirigiendo al inicio...<br>
+      🎉 Te contactaremos pronto.
+    </div>
   </form>
 </div>
+
+<script>
+  document.getElementById('citaForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+      nombre: document.getElementById('nombre').value,
+      telefono: document.getElementById('telefono').value,
+      correo: document.getElementById('correo').value,
+      especialidad: document.getElementById('especialidad').value,
+      fecha: document.getElementById('fecha').value,
+      hora: document.getElementById('hora').value,
+      comentarios: document.getElementById('comentarios').value,
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycby52qs2KNkLxrByJ1-oP_aJlsOgXWEIL0n0qFogmg5g9Pr8Jwh6mQ9MVbD3n7/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    }).then(() => {
+      const msg = document.getElementById("confirmacion");
+      msg.style.display = "block";
+      setTimeout(() => {
+        msg.style.display = "none";
+        document.getElementById("citaForm").reset();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 5000);
+    }).catch(error => {
+      alert("Ocurrió un error al registrar tu cita. Inténtalo más tarde.");
+      console.error("Error al enviar datos:", error);
+    });
+  });
+</script>
 
 </body>
 </html>
